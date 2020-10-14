@@ -9,34 +9,34 @@
 * -------------------- 
 *)
 
-Theorem ex55: forall A : Prop -> Prop,
+Theorem ex55: forall A : Set -> Prop,
               (forall x, A x) <-> (forall y, A y).
 Proof.
   split. intro. apply H.
   intro. apply H.
 Qed.
 
-Theorem ex56: forall A : Prop -> Prop,
+Theorem ex56: forall A : Set -> Prop,
               (exists x, A x) <-> (exists y, A y).
 Proof.
   split. intro. apply H.
   intro. apply H.
 Qed.
 
-Theorem ex57: forall A : Prop -> Prop -> Prop,
+Theorem ex57: forall A : Set -> Set -> Prop,
               (forall x y, A x y) <-> (forall y x, A y x).
 Proof.
   split. intro. apply H. intro. apply H.
 Qed.
 
-Theorem ex58: forall A : Prop -> Prop -> Prop,
+Theorem ex58: forall A : Set -> Set -> Prop,
               (exists x, exists y, A x y) <->
               (exists y, exists x, A y x).
 Proof.
   split. intro. apply H. intro. apply H.
 Qed.
 
-Theorem ex59: forall A : Prop -> Prop,
+Theorem ex59: forall A : Set -> Prop,
               ~(forall x, A x) <-> (exists x, ~A x).
 Proof.
   Require Import Classical.
@@ -47,7 +47,7 @@ Proof.
   apply H0. apply H1.
 Qed.
 
-Theorem ex60: forall A : Prop -> Prop,
+Theorem ex60: forall A : Set -> Prop,
               ~(exists x, A x) <-> (forall x, ~A x).
 Proof.
   split. intros. intro. apply H. exists x.
@@ -55,7 +55,7 @@ Proof.
   intros. elim (H x). assumption.
 Qed.
 
-Theorem ex61: forall A : Prop -> Prop,
+Theorem ex61: forall A : Set -> Prop,
               (forall x, A x) <-> ~(exists x, ~A x).
 Proof.
   Require Import Classical.
@@ -64,7 +64,7 @@ Proof.
   intro. apply H. exists x. assumption.
 Qed.
 
-Theorem ex62: forall A : Prop -> Prop,
+Theorem ex62: forall A : Set -> Prop,
               (exists x, A x) <-> ~(forall x, ~A x).
 Proof.
   Require Import Classical.
@@ -74,7 +74,7 @@ Proof.
   assumption.
 Qed.
 
-Theorem ex63: forall A B : Prop -> Prop,
+Theorem ex63: forall A B : Set -> Prop,
               (forall x, (A x) /\ (B x)) <-> 
               (forall x, A x) /\ (forall x, B x).
 Proof.
@@ -86,7 +86,7 @@ Proof.
   apply H0. apply H1.
 Qed.
 
-Theorem ex64: forall A : Prop -> Prop,
+Theorem ex64: forall A : Set -> Prop,
               forall E : Prop,
               (forall x, E /\ (A x)) <->
               (E /\ (forall x, A x)).
@@ -98,7 +98,7 @@ Proof.
   split. assumption. apply H1.
 Qed.
 
-Theorem ex65: forall A : Prop -> Prop,
+Theorem ex65: forall A : Set -> Prop,
               forall E : Prop,
               (forall x, E \/ (A x)) <->
               (E \/ (forall x, A x)).
@@ -112,7 +112,7 @@ Proof.
   intro. right. apply H0.
 Qed.
 
-Theorem ex66: forall A B : Prop -> Prop,
+Theorem ex66: forall A B : Set -> Prop,
               (exists x, (A x) \/ (B x)) <->
               (exists x, A x) \/ (exists x, B x).
 Proof.
@@ -124,7 +124,7 @@ Proof.
   elim H0. intros. exists x. right. assumption.
 Qed.
 
-Theorem ex67: forall A : Prop -> Prop,
+Theorem ex67: forall A : Set -> Prop,
               forall E : Prop,
               (exists x, E \/ (A x)) <->
               E \/ (exists x, A x).
@@ -136,7 +136,7 @@ Proof.
   elim H0. intros. exists x. right. assumption.
 Qed.
 
-Theorem ex68: forall A : Prop -> Prop,
+Theorem ex68: forall A : Set -> Prop,
               forall E : Prop,
               (exists x, E /\ (A x)) <->
               E /\ (exists x, A x).
@@ -148,22 +148,32 @@ Proof.
   assumption. assumption.
 Qed.
 
-Theorem ex69: forall E : Prop,
-              (forall x: Prop, E) <-> E.
+(*Theorem ex69: forall Q : Set,
+              forall E : Prop,
+              (forall x: Set, E) <-> E.
 Proof.
   Require Import Coq.Program.Basics.
-  split. intro. apply (H E). apply const.
+  split. intro. apply (H Q). apply const.
+Qed.*)
+
+Theorem ex69: forall E : Prop,
+              (forall x: Set, E) <-> E.
+Proof.
+  Require Import Coq.Program.Basics.
+  Require Import Classical.
+  split. intro. apply NNPP. intro. 
+  pose proof (H E). contradiction. apply const.
 Qed.
 
-Theorem ex70: forall E: Prop,
-              (exists x: Prop, E) <-> E.
+Theorem ex70: forall E : Prop,
+              (exists x: Type, E) <-> E.
 Proof.
   Require Import Coq.Program.Basics.
-  split. intro. elim H. refine (fun _: Prop => id).
+  split. intro. elim H. refine (fun _ => id).
   intro. exists E. assumption.
 Qed.
 
-Theorem ex71: forall A : Prop -> Prop,
+Theorem ex71: forall A : Set -> Prop,
               forall E : Prop,
               (exists x, E -> (A x)) <->
               (E -> (exists x, A x)).
@@ -176,7 +186,7 @@ Proof.
   apply H0. exists E. intro. contradiction.
 Qed.
 
-Theorem ex72: forall A : Prop -> Prop,
+Theorem ex72: forall A : Set -> Prop,
               forall E : Prop,
               (exists x, (A x) -> E) <->
               ((forall x, A x) -> E).
@@ -191,7 +201,7 @@ Proof.
   contradiction.
 Qed.
 
-Theorem ex73: forall A B : Prop -> Prop,
+Theorem ex73: forall A B : Set -> Prop,
               (exists x, (A x) -> (B x)) <->
               ((forall x, A x) -> (exists x, B x)).
 Proof.
@@ -204,7 +214,7 @@ Proof.
   exists x. intro. contradiction.
 Qed.
 
-Theorem ex74: forall A : Prop -> Prop,
+Theorem ex74: forall A : Set -> Prop,
               forall E : Prop,
               (forall x, (A x) -> E) <->
               ((exists x, A x) -> E).
@@ -213,7 +223,7 @@ Proof.
   assumption. intros. apply H. exists x. assumption.
 Qed.
 
-Theorem ex75: forall A : Prop -> Prop,
+Theorem ex75: forall A : Set -> Prop,
               forall E : Prop,
               (forall x, E -> (A x)) <->
               (E -> (forall x, A x)).
@@ -222,14 +232,14 @@ Proof.
   intros. apply (H H0).
 Qed.
 
-Theorem ex75_1: forall A B : Prop -> Prop,
+Theorem ex75_1: forall A B : Set -> Prop,
                 (forall x, (A x) -> (B x)) ->
                 ((forall x, A x) -> (forall x, B x)).
 Proof.
   intros. apply H. apply H0.
 Qed.
 
-Theorem ex75_2: forall A B : Prop -> Prop,
+Theorem ex75_2: forall A B : Set -> Prop,
                 (forall x, (A x) -> (B x)) ->
                 ((exists x, A x) -> (exists x, B x)).
 Proof.
@@ -237,7 +247,7 @@ Proof.
   assumption.
 Qed.
 
-Theorem ex75_3: forall P Q : Prop -> Prop,
+Theorem ex75_3: forall P Q : Set -> Prop,
                 (forall x, (P x) -> (~Q x)) <->
                 ~(exists x, (P x) /\ (Q x)).
 Proof.
@@ -248,7 +258,7 @@ Proof.
   exists x. split. assumption. assumption.
 Qed.
 
-Theorem ex75_4: forall P Q : Prop -> Prop,
+Theorem ex75_4: forall P Q : Set -> Prop,
                 forall E : Prop,
                 (forall x, (Q x) -> (P x) -> E) <->
                 ((exists x, (P x) /\ (Q x)) -> E).
@@ -259,7 +269,7 @@ Proof.
   assumption. assumption.
 Qed.
 
-Theorem ex75_5: forall P Q : Prop -> Prop,
+Theorem ex75_5: forall P Q : Set -> Prop,
                 (forall x, (P x) <-> (Q x)) ->
                 ((forall x, P x) <-> (forall x, Q x)).
 Proof.
@@ -267,7 +277,7 @@ Proof.
   apply H0. intros. apply (H x). apply H0.
 Qed. 
 
-Theorem ex75_6: forall P Q : Prop -> Prop,
+Theorem ex75_6: forall P Q : Set -> Prop,
                 (forall x, (P x) <-> (Q x)) ->
                 ((exists x, P x) <-> (exists x, Q x)).
 Proof.
@@ -277,20 +287,20 @@ Proof.
   elim H with x. intros. apply (H3 H1).
 Qed.
 
-Theorem ex76: forall A : Prop -> Prop,
+Theorem ex76: forall A : Set -> Prop,
               forall x, A x -> exists x, A x.
 Proof.
   intros. exists x. assumption.
 Qed.
 
-Theorem ex77: forall A : Prop -> Prop -> Prop,
+Theorem ex77: forall A : Set -> Set -> Prop,
               (exists x, forall y, A x y) ->
               (forall y, exists x, A x y).
 Proof.
   intros. elim H. intros. exists x. apply H0.
 Qed.
 
-Theorem ex78: forall A B : Prop -> Prop,
+Theorem ex78: forall A B : Set -> Prop,
               (exists x, (A x) /\ (B x)) ->
               ((exists x, A x) /\ (exists x, B x)).
 Proof.
@@ -299,7 +309,7 @@ Proof.
   elim H0. intros. exists x. assumption.
 Qed.
 
-Theorem ex78_1: forall P Q : Prop -> Prop,
+Theorem ex78_1: forall P Q : Set -> Prop,
                 (exists x, (P x) /\ (~Q x)) <->
                 ~(forall x, (P x) -> (Q x)).
 Proof.
@@ -312,7 +322,7 @@ Proof.
   assumption. assumption.
 Qed.
 
-Theorem ex78_2: forall P Q : Prop -> Prop,
+Theorem ex78_2: forall P Q : Set -> Prop,
                 forall E : Prop,
                 (exists x, (Q x) /\ (P x) /\ E) <->
                 (E /\ (exists x, (Q x) /\ (P x))).
@@ -327,7 +337,7 @@ Proof.
   assumption. assumption.
 Qed.
 
-Theorem ex79: forall A B : Prop -> Prop,
+Theorem ex79: forall A B : Set -> Prop,
               ((forall x, A x) \/ (forall x, B x)) ->
               (forall x, (A x) \/ (B x)).
 Proof.
@@ -335,70 +345,70 @@ Proof.
   right. apply H0.
 Qed.
 
-Theorem ex80: forall A B : Prop -> Prop,
+Theorem ex80: forall A B : Set -> Prop,
               ((exists x, A x) -> (forall x, B x)) ->
               (forall x, (A x) -> (B x)).
 Proof.
   intros. apply H. exists x. assumption.
 Qed.
 
-Theorem ex80_1: forall A B : Prop -> Prop,
-                forall x : Prop,
+Theorem ex80_1: forall A B : Set -> Prop,
+                forall t : Prop,
                 ((exists x, A x) -> (exists x, B x)) ->
                 (exists x, (A x) -> (B x)).
 Proof.
   Require Import Classical.
   intros. apply NNPP. intro. apply H0.
-  elim H. intros. exists x0. intro.
-  assumption. generalize (classic x). intro.
-  elim H1. intro. exists x. apply NNPP. intro.
-  apply H0. exists x. intro. contradiction.
-  intro. exists (not x). apply NNPP. intro.
-  apply H0. exists (not x).
+  elim H. intros. exists x. intro.
+  assumption. generalize (classic t). intro.
+  elim H1. intro. exists t. apply NNPP. intro.
+  apply H0. exists t. intro. contradiction.
+  intro. exists (not t). apply NNPP. intro.
+  apply H0. exists (not t).
   intro. contradiction.
 Qed.
 
-Theorem ex81: forall A : Prop -> Prop -> Prop,
+Theorem ex81: forall A : Set -> Set -> Prop,
               (forall x, forall y, A x y) ->
               (forall x, A x x).
 Proof.
   intros. apply H.
 Qed.
 
-Theorem ex82: forall A : Prop -> Prop -> Prop,
+Theorem ex82: forall A : Set -> Set -> Prop,
               (exists x, A x x) -> (exists x, exists y, A x y).
 Proof.
   intros. elim H. intros. exists x. exists x. assumption.
 Qed.
 
-Theorem ex83: forall A : Prop -> Prop,
+Theorem ex83: forall A : Set -> Prop,
               forall t : Prop,
               (forall x, A x) -> A t.
 Proof.
   intros. apply H.
 Qed.
 
-Theorem ex84: forall A : Prop -> Prop,
+Theorem ex84: forall A : Set -> Prop,
               forall t : Prop,
               A t -> (exists x, A x).
 Proof.
   intros. exists t. assumption.
 Qed.
 
-Theorem ex85: forall A : Prop -> Prop,
-              forall x : Prop,
+Theorem ex85: forall A : Set -> Prop,
+              forall t : Prop,
               (exists x, A x) \/ (exists x, ~A x).
 Proof.
   Require Import Classical.
   intros. apply NNPP. intro. 
   apply H. left. apply NNPP. intro. 
   apply H. right. apply NNPP. intro. 
-  apply H1. exists x. intro. 
-  apply H0. exists x. assumption.
+  apply H1. exists t. intro. 
+  apply H0. exists t. assumption.
 Qed.
 
-Theorem ex86: forall P Q : Prop -> Prop,
-              forall R : Prop -> Prop -> Prop,
+Theorem ex86: forall P Q : Set -> Prop,
+              forall R : Set -> Set -> Prop,
               (exists x, (P x) /\
                 (exists y, (Q y) /\ (R x y))) <->
               (exists y, (Q y) /\
@@ -414,8 +424,8 @@ Proof.
   assumption. assumption.
 Qed.
 
-Theorem ex87: forall P Q : Prop -> Prop,
-              forall R : Prop -> Prop -> Prop,
+Theorem ex87: forall P Q : Set -> Prop,
+              forall R : Set -> Set -> Prop,
               (exists x, (P x) /\
                 (forall y, (Q y) -> (R x y))) ->
               (forall y, (Q y) ->
@@ -464,7 +474,7 @@ Proof.
   intro. intro. apply H0. assumption.
 Qed.
 
-Theorem ex2_3a: forall A B C : Prop -> Prop,
+Theorem ex2_3a: forall A B C : Set -> Prop,
                 (forall x, (A x \/ B x) -> C x) -> 
                  (forall x, ((A x -> C x) /\ (B x -> C x))).
 Proof.
@@ -474,20 +484,20 @@ Qed.
 
 (* ====================== *)
 
-Theorem ex3_11: forall P Q : Prop -> Prop,
-                forall x : Prop,
+Theorem ex3_11: forall P Q : Set -> Prop,
+                forall t : Prop,
                 ((forall x, P x) -> (forall x, Q x)) ->
                 (exists x, (P x) -> (Q x)).
 Proof.
   Require Import Classical.
   intros. apply NNPP. intro.
-  apply H0. exists x. intro. apply H.
+  apply H0. exists t. intro. apply H.
   intros. apply NNPP. intro.
-  apply H0. exists x0. intro.
+  apply H0. exists x. intro.
   contradiction. 
 Qed.
 
-Theorem ex3_12: forall P Q : Prop -> Prop,
+Theorem ex3_12: forall P Q : Set -> Prop,
                 ~(exists x, P x) ->
                  (forall x, (P x) -> (Q x)).
 Proof.
@@ -495,7 +505,7 @@ Proof.
   intros. elim H. exists x. assumption.
 Qed.
 
-Theorem ex3_13: forall P : Prop -> Prop,
+Theorem ex3_13: forall P : Set -> Prop,
                 (forall x, P x) <->
                 (forall x, forall y, (P x) /\ (P y)).
 Proof.

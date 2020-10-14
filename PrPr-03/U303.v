@@ -26,8 +26,8 @@ Qed.
 Theorem ex0_1_3: forall a b g : Prop,
                  (a -> g) -> (g -> a -> b) -> (a -> b).
 Proof.
-  refine (fun _ _ _ f g x => _).
-  refine (g (f x) x).
+  refine (fun _ _ _ f t x => _).
+  refine (t (f x) x).
 Qed.
 
 Theorem ex0_1_4: forall a b : Prop,
@@ -62,29 +62,29 @@ Theorem ex0_1_8: forall a b g d : Prop,
                  (((a -> b -> g) -> (b -> a -> g)) -> d) -> d.
 Proof.
   refine (fun _ _ _ _ f => _).
-  refine (f flip). (* задачи на распознавание комбинаторов? *)
+  refine (f flip).
 Qed.
 
 Definition S : forall a b g : Prop,
           (a -> b -> g) -> (a -> b) -> a -> g.
 Proof.
-  refine (fun _ _ _ f g x => _).
-  refine (f x (g x)).
+  refine (fun _ _ _ f t x => _).
+  refine (f x (t x)).
 Defined.
 
 Theorem ex0_1_9: forall a b g d : Prop,
                  (((a -> b -> g) -> (a -> b) -> (a -> g)) -> d) -> d.
 Proof.
   refine (fun _ _ _ _ f => _).
-  refine (f (S P P0 P1)).
+  refine (f (S a b g)).
 Qed.
 
 Theorem ex0_1_10: forall a b g : Prop,
                   ((a -> b) -> g) -> ((b -> g) -> a -> b) -> g.
 Proof.
-  refine (fun _ _ _ f g => _).
-  refine (f (g (fun _ => _))).
-  refine (f (fun _ => p)).
+  refine (fun _ _ _ f t => _).
+  refine (f (t (fun _ => _))).
+  refine (f (fun _ => _H)).
 Qed.
 
 Theorem ex0_1_11: forall a b : Prop,
@@ -104,8 +104,8 @@ Qed.
 Definition P : forall a b g : Prop, 
            (a -> a -> g) -> (b -> a) -> b -> b -> g.
 Proof.
-  refine (fun _ _ _ f g x y => _).
-  refine ((f (g x)) (g y)).
+  refine (fun _ _ _ f t x y => _).
+  refine ((f (t x)) (t y)).
 Defined.
 
 Theorem ex1_1_2: forall a b g: Prop,
@@ -118,14 +118,14 @@ Theorem ex2_1_1: forall d: Prop,
                  (forall a: Type, a) -> d.
 Proof.
    refine (fun _ f => _).
-   refine (f P).
+   refine (f d).
 Qed.
  
 Theorem ex2_1_2: forall d t: Prop,
                  d -> (d -> (forall a: Type, a)) -> t.
 Proof.
-   refine (fun _ _ f g => _).
-   refine ((g f) P0).
+   refine (fun _ _ f m => _).
+   refine (m f t).
 Qed.
 
 Theorem ex2_1_3: forall d t: Prop,
@@ -148,7 +148,7 @@ Theorem ex2_2_1: forall b: Type,
                  (forall a: Type, a -> b) -> b.
 Proof.
    refine (fun _ x => _).
-   refine (x (T -> T) _). (* cut *)
+   refine (x (b -> b) _). (* cut *)
    refine id.
 Qed.
 
@@ -156,7 +156,7 @@ Theorem ex2_2_2: forall b: Prop,
                  (forall g: Type, g -> g -> b) -> b.
 Proof.
    refine (fun _ x => _).
-   refine (x (P -> P) _ _).
+   refine (x (b -> b) _ _).
    refine id.
    refine id.
 Qed.
@@ -166,7 +166,7 @@ Theorem ex2_2_3: forall b: Prop,
                  g -> b) -> b.
 Proof.
    refine (fun _ x => _).
-   refine (x (P -> P) _ (P -> P) _).
+   refine (x (b -> b) _ (b -> b) _).
    refine id.
    refine id.
 Qed.
@@ -175,6 +175,6 @@ Theorem ex2_2_4: forall b: Prop,
                  (forall a: Type, a -> forall g: Type, g) -> b.
 Proof.
    refine (fun _ x => _).
-   refine (x (P -> P) _ P).
+   refine (x (b -> b) _ b).
    refine id.
 Qed.
