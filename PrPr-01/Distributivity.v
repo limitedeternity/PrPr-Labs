@@ -22,23 +22,55 @@ Proof.
 Qed.
 
 Theorem ex29: forall a b c : Prop,
-              a \/ (b -> c) -> (a \/ b) -> (a \/ c).
+              a \/ (b -> c) <-> ((a \/ b) -> (a \/ c)).
 Proof.
-  intros. elim H0. intro. left. assumption.
+  Require Import Classical.
+  split. intros. elim H0. intro. left. assumption.
   elim H. intros. left. assumption.
   intros. right. apply (H1 H2).
+  intros. apply NNPP. intro.
+  elim H. intro. apply H0. left. assumption.
+  intro. apply H0. right. intro. assumption.
+  apply NNPP. intro. apply H0. right. intro.
+  elim H1. right. assumption.
+Qed.
+
+(* ------------------- *)
+
+Theorem ex15: forall a b : Prop,
+               (a -> b) <-> (~a \/ b).
+Proof.
+  Require Import Classical.
+  Require Import Coq.Program.Basics.
+  intros. split. intro. generalize (classic a).
+  intro. elim H0. intro. right. apply (H H1).
+  intro. left. assumption.
+  intros. elim H. intro. contradiction. apply id.
 Qed.
 
 Theorem ex30: forall a b c : Prop,
-              a \/ (b <-> c) -> (a \/ b <-> a \/ c).
+              a \/ (b <-> c) <-> (a \/ b <-> a \/ c).
 Proof.
-  intros. split. intro. elim H0. elim H. intro. left. assumption.
+  split. intro. split. intro.
+  elim H0. elim H. intro. left. assumption.
   intros. left. assumption. elim H. intros.
   left. assumption. intros. right. apply H1.
   assumption. intro. elim H0. intro. left. assumption.
   elim H. intros. left. assumption.
-  intros. right. apply H1. assumption. 
+  intros. right. apply H1. assumption.
+  intro. elim H. intros. rewrite ex15 in H0.
+  rewrite ex15 in H1. elim H0. intro.
+  elim H1. intro. right. split. rewrite ex15.
+  left. intro. apply H2. right. assumption.
+  intro. elim H3. right. assumption. intro.
+  contradiction. intro. decompose [or] H1.
+  contradiction. left. assumption. decompose [or] H0.
+  elim H3. right. assumption. left. assumption.
+  right. split. refine (fun H4 => H5).
+  refine (fun H5 => H4).
 Qed.
+
+(* ------------------- *)
 
 Theorem ex30_1: forall a b c : Prop,
                 (a -> b) -> (a /\ c) -> (b /\ c).
