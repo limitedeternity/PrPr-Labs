@@ -51,6 +51,7 @@ Qed.
 Theorem ex30: forall a b c : Prop,
               a \/ (b <-> c) <-> (a \/ b <-> a \/ c).
 Proof.
+  Require Import Setoid.
   split. intro. split. intro.
   elim H0. elim H. intro. left. assumption.
   intros. left. assumption. elim H. intros.
