@@ -2,7 +2,7 @@
 * --------------------
 * Avtor : Bespalov V.
 * Sessii: 
-  1. 2020-10-22T18:00:10.172Z - 2020-10-22T18:40:12.256Z
+  1. 2020-10-22T18:00:10.172Z - 2020-10-12T18:40:12.256Z
 * Resheno zadach: 16
 * -------------------- 
 *)
@@ -56,7 +56,7 @@ Qed.
 
 Theorem ex2_5_1: forall t: Type, t = t.
 Proof.
-   intros. reflexivity.
+   reflexivity.
 Qed.
 
 Theorem ex2_5_2: forall x y: Type,
@@ -95,11 +95,9 @@ Theorem ex2_5_6: (
                  ).
 Proof.
    split. intros. split. reflexivity.
-   intros. transitivity x. symmetry.
-   assumption. assumption.
-   split. reflexivity. split. intros. symmetry.
-   assumption. intros. transitivity y.
-   assumption. assumption.
+   apply ex2_5_4.
+   split. reflexivity. split. 
+   apply ex2_5_2. apply ex2_5_3.
 Qed.
 
 Theorem ex2_6_1: forall (x: Type),
@@ -149,5 +147,5 @@ Theorem ex3_1_3: forall (T: Type)
                  (exists x: T, forall y: T, A y <-> x = y)
                  -> exists x: T, A x.
 Proof.
-   intros. elim H. intros. exists x. apply H0. reflexivity.
+   intros. elim H. intros. exists x. apply (H0 x). reflexivity.
 Qed.
