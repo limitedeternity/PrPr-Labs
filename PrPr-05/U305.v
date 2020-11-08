@@ -1,7 +1,7 @@
    (*
    * --------------------
    * Avtor : Bespalov V.
-   * Resheno zadach: 13
+   * Resheno zadach: 15
    * --------------------
    *)
 
