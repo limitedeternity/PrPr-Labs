@@ -175,3 +175,29 @@
       generalize (t_7 j). intro. pose proof (H2 H0).
       pose proof (H3 H1). rewrite H4. rewrite H5. apply t_1.
    Qed.
+
+   (* ----------------------- *)
+   
+   Theorem ex_3_1: forall a : A, (exists x : A, x <*> a = e) -> 
+                   forall x y : A, a <*> x = a <*> y -> x = y.
+   Proof.
+      intros. elim H. intros. rename x0 into u. 
+      generalize (eq_op u u (a <*> x) (a <*> y)). intro.
+      rewrite <- (op_assoc u a x) in H2.
+      rewrite <- (op_assoc u a y) in H2.
+      rewrite H1 in H2. rewrite (e_neutral_left x) in H2.
+      rewrite (e_neutral_left y) in H2. apply H2. apply t_1.
+      assumption.
+   Qed.
+
+   Theorem ex_3_2: forall a : A, (exists y : A, a <*> y = e) ->
+                   forall x y : A, x <*> a = y <*> a -> x = y.
+   Proof.
+      intros. elim H. intros. rename x0 into u.
+      generalize (eq_op (x <*> a) (y <*> a) u u). intro.
+      rewrite (op_assoc x a u) in H2.
+      rewrite (op_assoc y a u) in H2.
+      rewrite H1 in H2. rewrite (e_neutral_right x) in H2.
+      rewrite (e_neutral_right y) in H2. apply H2. assumption. 
+      apply t_1.
+   Qed.
