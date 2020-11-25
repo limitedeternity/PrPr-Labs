@@ -1,95 +1,95 @@
-   (*
-   * --------------------
-   * Avtor : Bespalov V.
-   * Resheno zadach: 22
-   * --------------------
-   *)
+(*
+ * --------------------
+ * Avtor : Bespalov V.
+ * Resheno zadach: 22
+ * --------------------
+*)
 
 Require Import Arith.
 
 (* 0.1 *)
-   Inductive beautiful : nat -> Prop :=
-      | b_0   : beautiful 0
-      | b_3   : beautiful 3
-      | b_5   : beautiful 5
-      | b_sum : forall n m, beautiful n -> beautiful m
-                                        -> beautiful (n + m).
+Inductive beautiful : nat -> Prop :=
+   | b_0   : beautiful 0
+   | b_3   : beautiful 3
+   | b_5   : beautiful 5
+   | b_sum : forall n m, beautiful n -> beautiful m
+                                     -> beautiful (n + m).
 
-   Theorem three_is_beautiful: beautiful 3.
-   Proof.
-      apply b_3.
-   Qed.
+Theorem three_is_beautiful: beautiful 3.
+Proof.
+   apply b_3.
+Qed.
 
-   Theorem eight_is_beautiful: beautiful 8.
-   Proof.
-      apply (b_sum 3 5). apply b_3. apply b_5.
-   Qed.
+Theorem eight_is_beautiful: beautiful 8.
+Proof.
+   apply (b_sum 3 5). apply b_3. apply b_5.
+Qed.
 
-   Theorem beautiful_plus_eight:
-                   forall n, beautiful n -> beautiful (8 + n).
-   Proof.
-      intro. apply (b_sum 8 n). apply eight_is_beautiful.
-   Qed.
+Theorem beautiful_plus_eight:
+                forall n, beautiful n -> beautiful (8 + n).
+Proof.
+   intro. apply (b_sum 8 n). apply eight_is_beautiful.
+Qed.
 
-   Theorem b_times2: forall n, beautiful n -> beautiful (2 * n).
-   Proof.
-      intros. apply b_sum. assumption. rewrite <- plus_n_O. assumption.
-   Qed.
+Theorem b_times2: forall n, beautiful n -> beautiful (2 * n).
+Proof.
+   intros. apply b_sum. assumption. rewrite <- plus_n_O. assumption.
+Qed.
 
-   Theorem b_timesm: forall n m, beautiful n -> beautiful (n * m).
-   Proof.
-      intros. induction m. rewrite mult_comm. rewrite mult_0_l.
-      apply b_0. rewrite mult_succ_r. apply b_sum. assumption.
-      assumption. 
-   Qed.
+Theorem b_timesm: forall n m, beautiful n -> beautiful (n * m).
+Proof.
+   intros. induction m. rewrite mult_comm. rewrite mult_0_l.
+   apply b_0. rewrite mult_succ_r. apply b_sum. assumption.
+   assumption. 
+Qed.
 
 (* 0.2 *)
-   Inductive gorgeous : nat -> Prop :=
-      | g_0    : gorgeous 0
-      | g_plus3: forall n, gorgeous n -> gorgeous (3 + n)
-      | g_plus5: forall n, gorgeous n -> gorgeous (5 + n).
- 
-   Theorem gorgeous_plus13:
-                     forall n, gorgeous n -> gorgeous (13 + n).
-   Proof.
-      intros. apply g_plus5. apply g_plus5. apply g_plus3. assumption.
-   Qed.
- 
-   Theorem gorgeous_beautiful:
-                     forall n, gorgeous n -> beautiful n.
-   Proof.
-      intros. induction H. apply b_0. apply b_sum. apply b_3. assumption.
-      apply b_sum. apply b_5. assumption.
-   Qed.
- 
-   Theorem gorgeous_sum: forall n m, gorgeous n -> gorgeous m
-                                                -> gorgeous (n + m).
-   Proof.
-      intros. induction H. rewrite plus_O_n. assumption.
-      apply (g_plus3 (n + m)). assumption. apply (g_plus5 (n + m)).
-      assumption.
-   Qed.
- 
-   Theorem beautiful_gorgeous: forall n, beautiful n -> gorgeous n.
-   Proof.
-      intros. induction H. apply g_0. apply g_plus3. apply g_0.
-      apply g_plus5. apply g_0. apply gorgeous_sum. assumption. assumption.
-   Qed.
+Inductive gorgeous : nat -> Prop :=
+   | g_0    : gorgeous 0
+   | g_plus3: forall n, gorgeous n -> gorgeous (3 + n)
+   | g_plus5: forall n, gorgeous n -> gorgeous (5 + n).
 
-   Theorem g_times2: forall n, gorgeous n -> gorgeous (2 * n).
-   Proof.
-      intros. induction H. rewrite mult_0_r. apply g_0.
-      rewrite mult_plus_distr_l. apply gorgeous_sum.
-      simpl. apply g_plus3. apply g_plus3. apply g_0.
-      assumption. rewrite mult_plus_distr_l. apply gorgeous_sum.
-      simpl. apply g_plus5. apply g_plus5. apply g_0. assumption.
-   Qed.
+Theorem gorgeous_plus13:
+                  forall n, gorgeous n -> gorgeous (13 + n).
+Proof.
+   intros. apply g_plus5. apply g_plus5. apply g_plus3. assumption.
+Qed.
+
+Theorem gorgeous_beautiful:
+                  forall n, gorgeous n -> beautiful n.
+Proof.
+   intros. induction H. apply b_0. apply b_sum. apply b_3. assumption.
+   apply b_sum. apply b_5. assumption.
+Qed.
+
+Theorem gorgeous_sum: forall n m, gorgeous n -> gorgeous m
+                                             -> gorgeous (n + m).
+Proof.
+   intros. induction H. rewrite plus_O_n. assumption.
+   apply (g_plus3 (n + m)). assumption. apply (g_plus5 (n + m)).
+   assumption.
+Qed.
+
+Theorem beautiful_gorgeous: forall n, beautiful n -> gorgeous n.
+Proof.
+   intros. induction H. apply g_0. apply g_plus3. apply g_0.
+   apply g_plus5. apply g_0. apply gorgeous_sum. assumption. assumption.
+Qed.
+
+Theorem g_times2: forall n, gorgeous n -> gorgeous (2 * n).
+Proof.
+   intros. induction H. rewrite mult_0_r. apply g_0.
+   rewrite mult_plus_distr_l. apply gorgeous_sum.
+   simpl. apply g_plus3. apply g_plus3. apply g_0.
+   assumption. rewrite mult_plus_distr_l. apply gorgeous_sum.
+   simpl. apply g_plus5. apply g_plus5. apply g_0. assumption.
+Qed.
 
 (* 1.1 *)
 Fixpoint pred n :=
    match n with
       | 0   => 0
-      | S u => u
+      | S n => n
    end.
 
 Eval simpl in pred 0.
@@ -112,8 +112,8 @@ Eval simpl in pow 1 3.
 (* 1.3 *)
 Fixpoint max n m :=
    match n, m with
-      | _, 0    => n
-      | 0, _    => m
+      | _, 0     => n
+      | 0, _     => m
       | S n, S m => S (max n m)
    end.
 
@@ -125,8 +125,8 @@ Eval simpl in max 5 5.
 (* 1.4 *)
 Fixpoint min n m :=
    match n, m with
-      | _, 0    => 0
-      | 0, _    => 0
+      | _, 0     => 0
+      | 0, _     => 0
       | S n, S m => S (min n m)
    end.
 
@@ -138,17 +138,17 @@ Eval simpl in min 5 5.
 (* 1.5 *)
 Fixpoint divmod x y q u :=
    match x with
-      | 0    => (q, u)
-      | S x' => match u with
-                   | 0    => divmod x' y (S q) y
-                   | S u' => divmod x' y   q   u'
+      | 0   => (q, u)
+      | S x => match u with
+                  | 0   => divmod x y (S q) y
+                  | S u => divmod x y q u
                 end
    end.
 
 Definition div x y :=
    match y with
-      | 0    => y
-      | S y' => fst (divmod x y' 0 y')
+      | 0   => y
+      | S y => fst (divmod x y 0 y)
    end.
 
 Eval simpl in div 4 2.
@@ -159,8 +159,8 @@ Eval simpl in div 1 1.
 (* 1.6 *)
 Definition mod' x y :=
    match y with
-     | 0    => y
-     | S y' => y' - snd (divmod x y' 0 y')
+      | 0   => y
+      | S y => y - snd (divmod x y 0 y)
    end.
 
 Eval simpl in mod' 5 5.
@@ -170,8 +170,8 @@ Eval simpl in mod' 3 15.
 (* 1.7 *)
 Fixpoint gcd a b :=
    match a with
-     | O    => b
-     | S a' => gcd (b mod (S a')) (S a')
+      | O    => b
+      | S a => gcd (b mod (S a)) (S a)
    end.
 
 Eval simpl in gcd 28 42.
@@ -179,54 +179,11 @@ Eval simpl in gcd 28 42.
 (* 1.8 *)
 Definition lcm a b := 
    match a, b with
-     | 0, 0 => 0
-     | _, _ => (div a (gcd a b)) * b
+      | 0, 0 => 0
+      | _, _ => (div a (gcd a b)) * b
    end.
 
 Eval simpl in lcm 28 21.
-
-(* 1.9 *)
-Fixpoint sqrt_iter k p q r :=
-   match k with
-     | O    => p
-     | S k' => match r with
-                 | O    => sqrt_iter k' (S p)
-                                        (S (S q))
-                                        (S (S q))
-                 | S r' => sqrt_iter k' p q r'
-               end
-   end.
-
-Definition sqrt n := 
-   match n with
-     | 0 => 0
-     | 1 => 1
-     | _ => sqrt_iter n 0 0 0
-   end.
-
-Eval simpl in sqrt 121.
-Eval simpl in sqrt 122.
-
-(* 1.10 *)
-Fixpoint log2_iter k p q r :=
-   match k with
-     | O    => p
-     | S k' => match r with
-                 | O    => log2_iter k' (S p) (S q) q
-                 | S r' => log2_iter k'   p   (S q) r'
-               end
-   end.
-
-Definition log2 n := 
-   match n with
-     | 1 => 0
-     | _ => log2_iter (pred n) 0 1 0
-   end.
-
-Eval simpl in log2 1.
-Eval simpl in log2 2.
-Eval simpl in log2 4.
-Eval simpl in log2 5.
 
 (* 2.1 *)
 Fixpoint sum n m :=
@@ -259,7 +216,7 @@ Qed.
 Fixpoint mult n m :=
    match n with
       | 0   => 0
-      | S p => sum m (mult p m)
+      | S n => sum m (mult n m)
    end.
 
 Theorem mult_a: forall (n m : nat), mult n m = mult m n.
@@ -354,7 +311,7 @@ Eval simpl in odd 2.
 Fixpoint f1 k :=
    match k with
       | 0   => 1
-      | S m => 2 * (f1 m)
+      | S k => 2 * (f1 k)
    end.
 
 Theorem f1': forall k: nat, f1 k = pow 2 k.
@@ -365,11 +322,11 @@ Proof.
 Qed.
 
 (* 4.1.2 *)
-(* k+1 *)
+(* 1 + k *)
 Fixpoint f2 k :=
    match k with
       | 0   => 1
-      | S m => 1 + (f2 m)
+      | S k => 1 + (f2 k)
    end.
 
 Theorem f2': forall k: nat, f2 k = 1 + k.
@@ -382,8 +339,8 @@ Qed.
 (* k! *)
 Fixpoint f3 k :=
    match k with
-     | 0   => 1
-     | S m => k * (f3 m)
+     | 0    => 1
+     | S k => k * (f3 k)
    end.
 
 Fixpoint fact n :=
@@ -397,13 +354,14 @@ Axiom f3': forall k: nat, f3 k = fact k.
 Eval simpl in f3 0.
 Eval simpl in f3 2.
 Eval simpl in f3 3.
+Eval simpl in fact 5.
 
 (* 4.1.4 *)
 (* 2k + 1 *)
 Fixpoint f4 k :=
    match k with
       | 0   => 1
-      | S m => 2 + (f4 m)
+      | S k => 2 + (f4 k)
    end.
 
 Theorem f4': forall k: nat, f4 k = 2 * k + 1.
@@ -419,7 +377,7 @@ Qed.
 Fixpoint f5 k :=
    match k with
       | 0   => 1
-      | S m => (f5 m)
+      | S k => (f5 k)
    end.
 
 Theorem f5': forall k: nat, f5 k = 1.
@@ -433,7 +391,7 @@ Qed.
 Fixpoint f6 k :=
    match k with
       | 0   => 1
-      | S m => 5 * (f6 m)
+      | S k => 5 * (f6 k)
    end.
 
 Theorem f6': forall k: nat, f6 k = pow 5 k.
@@ -448,7 +406,7 @@ Qed.
 Fixpoint f7 k :=
    match k with
       | 0   => 1
-      | S m => 2 * (f7 m) + 5
+      | S k => 2 * (f7 k) + 5
    end.
 
 Eval simpl in f7 0.
