@@ -179,7 +179,7 @@ Eval simpl in gcd 28 42.
 (* 1.8 *)
 Definition lcm a b := 
    match a, b with
-      | 0, 0 => 0
+      | 1, 1 => 1
       | _, _ => (div a (gcd a b)) * b
    end.
 
@@ -339,13 +339,13 @@ Qed.
 (* k! *)
 Fixpoint f3 k :=
    match k with
-     | 0    => 1
+     | 0   => 1
      | S k => k * (f3 k)
    end.
 
 Fixpoint fact n :=
    match n with
-      | 0 => 1
+      | 0   => 1
       | S n => n * fact n
    end.
 
