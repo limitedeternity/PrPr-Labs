@@ -100,15 +100,15 @@
    Theorem t_k: forall (t r s : nat),
                    t = r -> t * s = r * s.
    Proof.
-      intros. apply (f_equal2_mult t r s s). assumption. apply t_a.
+      intros. rewrite H. apply t_a.
    Qed.
 
    (* --------------------------------- *)
    Theorem t_l: forall t : nat, 0 * t = 0.
    Proof.
       intros. rewrite (mult_n_O t) at 2. induction t. apply t_a.
-      rewrite <- mult_n_Sm. rewrite <- plus_n_O.
-      rewrite <- (mult_n_O (S t)). rewrite (mult_n_O t) at 2.
+      rewrite <- mult_n_Sm. rewrite <- (mult_n_O (S t)). 
+      rewrite <- (plus_n_O (0 * t)). rewrite <- (mult_n_O t) in IHt.
       assumption.
    Qed.
 

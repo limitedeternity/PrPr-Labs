@@ -52,7 +52,10 @@ Inductive gorgeous : nat -> Prop :=
 Theorem gorgeous_plus13:
                   forall n, gorgeous n -> gorgeous (13 + n).
 Proof.
-   intros. apply g_plus5. apply g_plus5. apply g_plus3. assumption.
+   intros. cut (13 = 5 + 8). intro. 
+   rewrite H0. apply (g_plus5 (8 + n)). 
+   cut (8 = 5 + 3). intro. rewrite H1. apply (g_plus5 (3 + n)). 
+   apply g_plus3. assumption. simpl. reflexivity. simpl. reflexivity.
 Qed.
 
 Theorem gorgeous_beautiful:
@@ -72,17 +75,19 @@ Qed.
 
 Theorem beautiful_gorgeous: forall n, beautiful n -> gorgeous n.
 Proof.
-   intros. induction H. apply g_0. apply g_plus3. apply g_0.
-   apply g_plus5. apply g_0. apply gorgeous_sum. assumption. assumption.
+   intros. induction H. apply g_0. apply (g_plus3 0). apply g_0.
+   apply (g_plus5 0). apply g_0. apply gorgeous_sum. assumption. assumption.
 Qed.
 
 Theorem g_times2: forall n, gorgeous n -> gorgeous (2 * n).
 Proof.
    intros. induction H. rewrite mult_0_r. apply g_0.
    rewrite mult_plus_distr_l. apply gorgeous_sum.
-   simpl. apply g_plus3. apply g_plus3. apply g_0.
+   simpl. cut (6 = 3 + 3). intro. rewrite H0. apply g_plus3. 
+   apply (g_plus3 0). apply g_0. simpl. reflexivity.
    assumption. rewrite mult_plus_distr_l. apply gorgeous_sum.
-   simpl. apply g_plus5. apply g_plus5. apply g_0. assumption.
+   simpl. cut (10 = 5 + 5). intro. rewrite H0. apply g_plus5. 
+   apply (g_plus5 0). apply g_0. simpl. reflexivity. assumption.
 Qed.
 
 (* 1.1 *)
@@ -166,24 +171,6 @@ Definition mod' x y :=
 Eval simpl in mod' 5 5.
 Eval simpl in mod' 8 3.
 Eval simpl in mod' 3 15.
-
-(* 1.7 *)
-Fixpoint gcd a b :=
-   match a with
-      | O    => b
-      | S a => gcd (b mod (S a)) (S a)
-   end.
-
-Eval simpl in gcd 28 42.
-
-(* 1.8 *)
-Definition lcm a b := 
-   match a, b with
-      | 1, 1 => 1
-      | _, _ => (div a (gcd a b)) * b
-   end.
-
-Eval simpl in lcm 28 21.
 
 (* 2.1 *)
 Fixpoint sum n m :=
@@ -322,17 +309,24 @@ Proof.
 Qed.
 
 (* 4.1.2 *)
-(* 1 + k *)
+(* k + 1 *)
 Fixpoint f2 k :=
    match k with
       | 0   => 1
       | S k => 1 + (f2 k)
    end.
 
-Theorem f2': forall k: nat, f2 k = 1 + k.
+(*Theorem f2': forall k: nat, f2 k = 1 + k.
 Proof.
    intros. induction k. simpl. reflexivity.
    simpl. apply eq_S. rewrite IHk. simpl. reflexivity.
+Qed.*)
+
+Theorem f2': forall k: nat, f2 k = k + 1.
+Proof.
+   intros. induction k. simpl. reflexivity. 
+   simpl. rewrite plus_comm. apply eq_S. rewrite IHk. 
+   rewrite plus_comm. reflexivity.
 Qed.
 
 (* 4.1.3 *)
@@ -340,7 +334,7 @@ Qed.
 Fixpoint f3 k :=
    match k with
      | 0   => 1
-     | S k => k * (f3 k)
+     | S k => k * f3 k
    end.
 
 Fixpoint fact n :=
@@ -349,7 +343,10 @@ Fixpoint fact n :=
       | S n => n * fact n
    end.
 
-Axiom f3': forall k: nat, f3 k = fact k.
+Theorem f3': forall k: nat, f3 k = fact k.
+Proof.
+   intros. unfold f3, fact. fold f3. reflexivity.
+Qed.
 
 Eval simpl in f3 0.
 Eval simpl in f3 2.
@@ -402,7 +399,7 @@ Proof.
 Qed.
 
 (* 4.1.7 *)
-(* простые числа? *)
+(* 2^k * 6 - 5 *)
 Fixpoint f7 k :=
    match k with
       | 0   => 1
@@ -413,3 +410,13 @@ Eval simpl in f7 0.
 Eval simpl in f7 1.
 Eval simpl in f7 2.
 Eval simpl in f7 3.
+
+Theorem f7': forall k: nat, 5 + f7 k = (pow 2 k) * 6.
+Proof.
+   intros. induction k. simpl. reflexivity. unfold f7, pow. fold f7. fold pow.
+   rewrite <- (mult_assoc 2 (pow 2 k) 6). rewrite <- IHk.
+   cut (5 + 5 = 2 * 5). intro. Focus 2. simpl. reflexivity. 
+   rewrite plus_assoc. rewrite mult_plus_distr_l. 
+   rewrite <- plus_assoc. rewrite (plus_comm (2 * f7 k) 5).
+   rewrite plus_assoc. rewrite H. reflexivity.
+Qed.
