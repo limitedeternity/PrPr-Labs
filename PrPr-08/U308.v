@@ -10,18 +10,6 @@ Require Import Arith.
 Require Import Setoid.
 Open Scope list_scope.
 
-Theorem simpl_length: forall (A : Type)
-                    (a : A)
-                    (l : list A),
-                     length (a :: l) = 1 + length l.
-Proof.
-  intros. induction l. unfold length. reflexivity.
-  assert (length (a0 :: l) = 1 + length l).
-  rewrite <- IHl. unfold length. f_equal.
-  rewrite H. rewrite plus_assoc.
-  reflexivity.
-Qed.
-
 Theorem simpl_succ: forall n: nat, S n = 1 + n.
 Proof.
   intros. compute. reflexivity.
@@ -39,9 +27,7 @@ Theorem app_ge_0: forall (A : Type)
                          (l : list A),
                      0 <= length l.
 Proof.
-  intros. induction l. unfold length. reflexivity.
-  rewrite simpl_length. elim IHl. apply le_plus_r. 
-  intros. apply (O_is_min (1 + S m)).
+  intros. apply O_is_min.
 Qed.
 
 (* 1_2 *)
@@ -50,9 +36,7 @@ Theorem app_length: forall (A : Type)
              length (l ++ l') = length l + length l'.
 Proof.
   intros. induction l. simpl. reflexivity.
-  rewrite simpl_length. rewrite <- app_comm_cons. 
-  rewrite simpl_length. rewrite IHl. rewrite plus_assoc.
-  reflexivity.
+  simpl. rewrite IHl. reflexivity.
 Qed.
 
 Theorem Свойство_1: forall ls1 ls2 ls3 : list Set,
