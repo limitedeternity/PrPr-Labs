@@ -17,9 +17,21 @@ Qed.
 
 Theorem O_is_min: forall n: nat, 0 <= n.
 Proof.
-  intros. induction n. reflexivity. rewrite simpl_succ.
+  intros. induction n. apply (le_O_n 0). rewrite simpl_succ.
   apply (le_plus_trans 0 1 n).
   rewrite plus_n_O. apply le_plus_r.
+Qed.
+
+Theorem app_assoc: forall (A: Type) (l m n: list A), l ++ m ++ n = (l ++ m) ++ n.
+Proof.
+  intros. induction l. simpl. reflexivity.
+  simpl. rewrite IHl. reflexivity.
+Qed.
+
+Theorem app_nil_r: forall (A : Type) (l: list A), l ++ nil = l.
+Proof.
+  intros. induction l. simpl. reflexivity.
+  simpl. rewrite IHl. reflexivity.
 Qed.
 
 (* 1_1 *)
@@ -43,8 +55,8 @@ Theorem Свойство_1: forall ls1 ls2 ls3 : list Set,
                        app (app ls1 ls2) ls3
                                = app ls1 (app ls2 ls3).
 Proof.
-  intros. rewrite <- app_assoc. induction ls1. simpl. reflexivity.
-  reflexivity.
+  intros. induction ls1. simpl. reflexivity.
+  rewrite <- app_assoc. reflexivity.
 Qed.
 
 Theorem Свойство_2: forall (x  : Set)
